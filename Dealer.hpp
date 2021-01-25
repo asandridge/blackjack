@@ -12,6 +12,8 @@ class Dealer
 
      public:
 
+        void complete_hand();
+        void hit();
 
 };
 

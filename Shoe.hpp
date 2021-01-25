@@ -9,12 +9,12 @@ using namespace std;
 
 class Shoe
 {
-     private:
+    private:
 
         vector<string> shoe;
         string suit [13] = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "10", "10", "10", "A" };
 
-     public:
+    public:
 
         Shoe(int decks) {
 

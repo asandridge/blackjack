@@ -16,18 +16,31 @@ using namespace std;
 
 class Table
 {
-     private:
+    private:
+
+        int decks;
+        bool h17;
+        bool dos;
+        bool variants;
+        string counting_strategy;
+        string blackjack_payout;
 
         Player player;
         Dealer dealer;
         Shoe shoe;
 
-     public:
+    public:
 
-        Table() : shoe(6) {
-
-        }
-
+        Table(int decks, bool h17, bool dos, bool variants, string counting_strategy, string blackjack_payout) :
+            decks(decks),
+            h17(h17),
+            dos(dos),
+            variants(variants),
+            counting_strategy(counting_strategy),
+            blackjack_payout(blackjack_payout),
+            shoe(Shoe(decks)) {}
 };
+
+void Table::Table()
 
 #endif
