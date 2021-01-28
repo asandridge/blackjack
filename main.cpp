@@ -1,25 +1,36 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "RulesPrompt.hpp"
+#include "RuleBook.hpp"
 #include "Table.hpp"
 
 using namespace std;
 
 int main() {
 
-    RulesPrompt rules_prompt;
-    rules_prompt.set_rules();
-    rules_prompt.print_rules();
+    string max_hands;
+    cout << "How many hands do you want to play?" << endl;
+    cin >> max_hands;
+    while (stoi(max_hands) < 1) {
+        cout << "Please enter a positive integer" << endl;
+        cin >> max_hands;
+    }
 
-    Table table(
-        rules_prompt.get_decks(),
-        rules_prompt.get_h17(),
-        rules_prompt.get_dos(),
-        rules_prompt.get_variants(),
-        rules_prompt.get_counting_strategy(),
-        rules_prompt.get_blackjack_payout()
-    );
+    RuleBook rule_book;
+    rule_book.set_rules();
+    rule_book.print_rules();
+    RuleBook *rules = &rule_book;
+
+    Table table(rules);
+
+    int hands = 0;
+    int player_bankroll;
+    while (hands < stoi(max_hands)) {
+        player_bankroll = table.play_round();
+        hands++;
+    }
+
+    cout << "Final Player Bankroll: " << player_bankroll << endl;
 
     return 0;
 };

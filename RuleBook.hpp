@@ -1,5 +1,5 @@
-#ifndef RULES_PROMPT_H
-#define RULES_PROMPT_H
+#ifndef RULE_BOOK_H
+#define RULE_BOOK_H
 
 #include <iostream>
 #include <map>
@@ -7,18 +7,20 @@ using namespace std;
 
 vector<string> deck_choices = { "2", "4", "6", "8" };
 vector<string> counting_choices = { "Hi-Lo" };
-vector<string> payout_choices = { "3:2", "6:5" };
+vector<string> payout_choices = { "1.5", "1.2" };
+vector<string> resplit_choices = { "2", "3", "4" };
 
-class RulesPrompt
+class RuleBook
 {
     private:
 
         int decks;
         bool h17;
-        bool dos;
+        bool das;
         bool variants;
         string counting_strategy;
-        string blackjack_payout;
+        float blackjack_payout;
+        int resplit_limit;
 
         bool get_yes_no(string);
         string get_choice(string, vector<string>);
@@ -28,16 +30,17 @@ class RulesPrompt
         void set_rules();
         int get_decks();
         bool get_h17();
-        bool get_dos();
+        bool get_das();
         bool get_variants();
         string get_counting_strategy();
-        string get_blackjack_payout();
+        float get_blackjack_payout();
+        int get_resplit_limit();
         void print_rules();
 
 };
 
 
-    bool RulesPrompt::get_yes_no(string prompt) {
+    bool RuleBook::get_yes_no(string prompt) {
         string rule;
         cout << "Do you want to play " << prompt << " (y/n)" << endl;
         cin >> rule;
@@ -48,7 +51,7 @@ class RulesPrompt
         return rule == "y";
     }
 
-    string RulesPrompt::get_choice(string prompt, vector<string> choice_vector) {
+    string RuleBook::get_choice(string prompt, vector<string> choice_vector) {
 
         string choice_string = "";
         for (vector<string>::iterator it = choice_vector.begin(); it != choice_vector.end(); ++it) {
@@ -68,65 +71,73 @@ class RulesPrompt
         return rule;
     }
 
-    void RulesPrompt::set_rules() {
+    void RuleBook::set_rules() {
 
-        cout << endl << "Default rules: 6 decks, H17, DOS, variants, Hi-Lo counting, 3:2 blackjack payout" << endl;
+        cout << endl << "Default rules: 6 decks, H17, DAS, variants, Hi-Lo counting, 3:2 blackjack payout, resplit to 3 hands" << endl;
         bool default_rules = get_yes_no("with default rules?");
 
         if (!default_rules) {
 
-            this->decks = stoi(get_choice("How many decks", deck_choices));
-            this->h17 = get_yes_no("H17 (hit on seventeen)?");
-            this->dos = get_yes_no("with DOS (double on split)?");
-            this->variants = get_yes_no("with count-based variants?");
-            this->counting_strategy = get_choice("What counting strategy", counting_choices);
-            this->blackjack_payout = get_choice("What blackjack payout", payout_choices);
+            decks = stoi(get_choice("How many decks", deck_choices));
+            h17 = get_yes_no("H17 (hit on seventeen)?");
+            das = get_yes_no("with DAS (double after split)?");
+            variants = get_yes_no("with count-based variants?");
+            counting_strategy = get_choice("What counting strategy", counting_choices);
+            blackjack_payout = stof(get_choice("What blackjack payout", payout_choices));
+            resplit_limit = stoi(get_choice("What resplit limit", resplit_choices));
 
         } else {
 
             cout << endl << "Rules will be set to defaults." << endl;
-            decks = 6;
+            decks = stoi(deck_choices[2]);
             h17 = true;
-            dos = true;
+            das = true;
             variants = true;
             counting_strategy = counting_choices[0];
-            blackjack_payout = payout_choices[0];
+            blackjack_payout = stof(payout_choices[0]);
+            resplit_limit = stoi(resplit_choices[2]);
         }
     }
 
-    int RulesPrompt::get_decks() {
+    int RuleBook::get_decks() {
         return decks;
     }
 
-    bool RulesPrompt::get_h17() {
+    bool RuleBook::get_h17() {
         return h17;
     }
 
-    bool RulesPrompt::get_dos() {
-        return dos;
+    bool RuleBook::get_das() {
+        return das;
     }
 
-    bool RulesPrompt::get_variants() {
+    bool RuleBook::get_variants() {
         return variants;
     }
 
-    string RulesPrompt::get_counting_strategy() {
+    string RuleBook::get_counting_strategy() {
         return counting_strategy;
     }
 
-    string RulesPrompt::get_blackjack_payout() {
+    float RuleBook::get_blackjack_payout() {
         return blackjack_payout;
     }
 
-    void RulesPrompt::print_rules() {
+    int RuleBook::get_resplit_limit() {
+        return resplit_limit;
+    }
+
+    void RuleBook::print_rules() {
         cout << endl;
         cout << "Current rules:" << endl;
         cout << "   Decks: " << this->decks << endl;
         cout << "   H17: " << (this->h17 ? "True" : "False") << endl;
-        cout << "   DOS: " << (this->dos ? "True" : "False") << endl;
+        cout << "   DAS: " << (this->das ? "True" : "False") << endl;
         cout << "   Variants: " << (this->variants ? "True" : "False") << endl;
         cout << "   Counting Strategy: " << counting_strategy << endl;
         cout << "   Blackjack Payout: " << blackjack_payout << endl;
+        cout << "   Resplit Limit: " << resplit_limit << endl;
+        cout << endl;
     }
 
 #endif

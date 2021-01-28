@@ -43,6 +43,10 @@ class Shoe
             }
             cout << endl;
         }
+
+        int get_shoe_size() {
+            return shoe.size();
+        }
 };
 
 #endif
