@@ -41,3 +41,5 @@ These rules are built into the program.
 **Dealer Blackjack**: Player only loses original bet to a dealer blackjack.
 
 **Basic Strategy**: The tables for the basic strategy implemented here can be found [here](https://www.blackjackapprenticeship.com/blackjack-strategy-charts/).
+
+**Player Bankroll** The player starts with $1000 and the betting unit is $10.
