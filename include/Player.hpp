@@ -5,12 +5,10 @@
 #include <string>
 #include <tuple>
 
-#include "Shoe.hpp"
-#include "RuleBook.hpp"
-#include "ScoreHelper.hpp"
+#include "../src/Shoe.cpp"
+#include "../src/ScoreHelper.cpp"
 
 using namespace std;
-
 class Player
 {
     private:

@@ -2,11 +2,11 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <math.h
+#include <math.h>
 #include <tuple>
 
-#include "Player.hpp"
-#include "Moves.hpp"
+#include "../include/Player.hpp"
+#include "../include/Moves.hpp"
 
 using namespace std;
 
@@ -72,20 +72,20 @@ int Player::complete_hand(string dealer_upcard, vector<string> *hand, bool after
 
     bool cannot_double = !rules->get_das() && after_split;
     bool cannot_surrender = !hand_first_move; 
-    if ((move == DOUBLE && cannot_double) ||
-        (move == SURRENDER && cannot_surrender)) { // default to hit if current move is not allowed based on current game state
+    if ((move == moves::DOUBLE && cannot_double) ||
+        (move == moves::SURRENDER && cannot_surrender)) { // default to hit if current move is not allowed based on current game state
         move = moves::HIT;
     }
 
     switch (move) {
-        case DOUBLE:
+        case moves::DOUBLE:
             hit(hand);
             return 2;
-        case SURRENDER:
+        case moves::SURRENDER:
             return 0;
-        case STAND:
+        case moves::STAND:
             return 1;
-        case HIT:
+        case moves::HIT:
             hit(hand);
             return complete_hand(dealer_upcard, hand, after_split, false);
         default:
@@ -140,8 +140,9 @@ void Player::update_running_count(vector<string> dealer_hand) {
     for (int i = 0; i < dealer_hand.size(); i++) {
         running_count += count_map[dealer_hand[i]];
     }
+    vector<string> hand_cards;
     for (int i = 0; i < hands.size(); i++) {
-        vector<string> hand_cards = get<0>(hands[i]);
+        hand_cards = get<0>(hands[i]);
         for (int j = 0; j < hand_cards.size(); j++) {
             running_count += count_map[hand_cards[j]];
         }

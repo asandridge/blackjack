@@ -2,7 +2,7 @@
 #include <string>
 #include <tuple>
 
-#include "Dealer.hpp"
+#include "../include/Dealer.hpp"
 
 using namespace std;
 
@@ -45,11 +45,14 @@ void Dealer::make_refunds(int bet) {
 
     vector<tuple<vector<string>, int>> player_hands = player->get_hands();
     int blackjack_payout = rules->get_blackjack_payout();
+    vector<string> cards;
+    int in_game_bet;
+    int refund_multiplier;
 
     for (int i = 0; i < player_hands.size(); i++) {
-        vector<string> hand_cards = get<0>(player_hands[i]);
-        int in_game_bet = get<1>(player_hands[i]);
-        int refund_multiplier = score_helper.calculate_refund(hand, hand_cards, blackjack_payout);
+        cards = get<0>(player_hands[i]);
+        in_game_bet = get<1>(player_hands[i]);
+        refund_multiplier = score_helper.calculate_refund(hand, cards, blackjack_payout);
         player->payout(in_game_bet * refund_multiplier * bet);
     }
 

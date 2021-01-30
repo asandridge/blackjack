@@ -1,10 +1,8 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include "Player.hpp"
-#include "Dealer.hpp"
-#include "Shoe.hpp"
-#include "ScoreHelper.hpp"
+#include "../src/Player.cpp"
+#include "../src/Dealer.cpp"
 
 using namespace std;
 
@@ -32,7 +30,7 @@ class Table
             {}
 
         int play_round();
-        void print_table();
+        void print_table(vector<tuple<vector<string>, int>>);
 };
 
 

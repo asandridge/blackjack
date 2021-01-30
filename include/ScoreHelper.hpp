@@ -5,7 +5,7 @@
 #include <string>
 #include <tuple>
 
-#include "Moves.hpp"
+#include "../include/Moves.hpp"
 
 using namespace std;
 

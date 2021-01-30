@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 
-#include "Shoe.hpp"
+#include "../include/Shoe.hpp"
 
 using namespace std;
 

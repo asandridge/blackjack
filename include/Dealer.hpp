@@ -5,11 +5,6 @@
 #include <vector>
 #include <string>
 
-#include "Shoe.hpp"
-#include "RuleBook.hpp"
-#include "Player.hpp"
-#include "ScoreHelper.hpp"
-
 using namespace std;
 
 class Dealer

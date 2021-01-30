@@ -1,9 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <regex>
 
-#include "RuleBook.hpp"
-#include "Table.hpp"
+#include "RuleBook.cpp"
+#include "Table.cpp"
 
 using namespace std;
 
@@ -12,7 +13,8 @@ int main() {
     string max_hands;
     cout << "How many hands do you want to play?" << endl;
     cin >> max_hands;
-    while (stoi(max_hands) < 1) {
+    regex regex_pattern("[0-9]+");
+    while (!regex_match(max_hands, regex_pattern)) {
         cout << "Please enter a positive integer" << endl;
         cin >> max_hands;
     }

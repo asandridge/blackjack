@@ -28,9 +28,9 @@ These rules are built into the program.
 
 **Resplit Aces**: Not allowed.
 
-**Blackjack on Split Aces**: Not allowed.
+**Blackjack on Split Aces**: Allowed.
 
-**Hitting Split Aces**: Not allowed.
+**Hitting Split Aces**: Allowed.
 
 **Soft Hand Doubling Variants**: The player can double on any soft hand.
 

@@ -4,8 +4,8 @@
 #include <map>
 #include <tuple>
 
-#include "ScoreHelper.hpp"
-#include "Moves.hpp"
+#include "../include/ScoreHelper.hpp"
+#include "../include/Moves.hpp"
 
 using namespace std;
 
@@ -61,6 +61,7 @@ tuple<int, bool> ScoreHelper::calculate_hand_score(vector<string> hand) {
        }
     }
 
+    if (sum > 21) sum = 0;
     bool is_soft_hand = first_ace && sum <= 21 && sum > 12; // a 'soft 12' would be two aces, and should be counted as a hard 12
 
     return { sum, is_soft_hand };
@@ -97,7 +98,7 @@ int ScoreHelper::calculate_refund(vector<string> dealer_hand, vector<string> pla
         }
     } else if (player_count > dealer_count) {
         return 2;
-    } else if (player_count == dealer_count) {
+    } else if (player_count == dealer_count && player_count != 0) { // player loses automatically on bust
         return 1;
     } else {
         return 0;

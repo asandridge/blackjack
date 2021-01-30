@@ -3,7 +3,7 @@
 #include <vector>
 #include <map>
 
-#include "RuleBook.hpp"
+#include "../include/RuleBook.hpp"
 
 using namespace std;
 
@@ -45,7 +45,7 @@ string RuleBook::get_choice(string prompt, vector<string> choice_vector) {
 
 void RuleBook::set_rules() {
 
-    cout << endl << "Default rules: 6 decks, H17, DAS, variants, Hi-Lo counting, 3:2 blackjack payout, resplit to 3 hands" << endl;
+    cout << endl << "Default rules: 6 decks, H17, DAS, variants, Hi-Lo counting, 3:2 blackjack payout, resplit to 4 hands" << endl;
     bool default_rules = get_yes_no("with default rules?");
 
     if (!default_rules) {
