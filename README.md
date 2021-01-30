@@ -2,6 +2,12 @@
 
 This program is designed to accurately imitate a real-life blackjack game, and to help estimate EV (expected value) for playing blackjack as a card counter.
 
+To run the program:
+
+    make compile
+
+    make run
+
 ## Variable Rules
 
 These rules can be updated by the user.

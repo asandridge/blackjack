@@ -10,17 +10,17 @@
 
 using namespace std;
 
-map<string, map<string, bool>> splitting = {
-    { "A", { { "2", true }, { "3", true }, { "4", true }, { "5", true }, { "6", true }, { "7", true }, { "8", true }, { "9", true }, { "10", true }, { "A", true } }},
-    { "10", { { "2", false }, { "3", false }, { "4", false }, { "5", false }, { "6", false }, { "7", false }, { "8", false }, { "9", false }, { "10", false }, { "A", false } }},
-    { "9", { { "2", true }, { "3", true }, { "4", true }, { "5", true }, { "6", true }, { "7", false }, { "8", true }, { "9", true }, { "10", false }, { "A", false } }},
-    { "8", { { "2", true }, { "3", true }, { "4", true }, { "5", true }, { "6", true }, { "7", true }, { "8", true }, { "9", true }, { "10", true }, { "A", true } }},
-    { "7", { { "2", true }, { "3", true }, { "4", true }, { "5", true }, { "6", true }, { "7", true }, { "8", false }, { "9", false }, { "10", false }, { "A", false } }},
-    { "6", { { "2", NULL }, { "3", true }, { "4", true }, { "5", true }, { "6", true }, { "7", false }, { "8", false }, { "9", false }, { "10", false }, { "A", false } }},
-    { "5", { { "2", false }, { "3", false }, { "4", false }, { "5", false }, { "6", false }, { "7", false }, { "8", false }, { "9", false }, { "10", false }, { "A", false } }},
-    { "4", { { "2", false }, { "3", false }, { "4", false }, { "5", NULL }, { "6", NULL }, { "7", false }, { "8", false }, { "9", false }, { "10", false }, { "A", false } }},
-    { "3", { { "2", NULL }, { "3", NULL }, { "4", true }, { "5", true }, { "6", true }, { "7", true }, { "8", false }, { "9", false }, { "10", false }, { "A", false } }},
-    { "2", { { "2", NULL }, { "3", NULL }, { "4", true }, { "5", true }, { "6", true }, { "7", true }, { "8", false }, { "9", false }, { "10", false }, { "A", false } }}
+map<string, map<string, moves::splitting>> splitting = {
+    { "A", { { "2", moves::SPLIT_TRUE }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_TRUE }, { "9", moves::SPLIT_TRUE }, { "10", moves::SPLIT_TRUE }, { "A", true } }},
+    { "10", { { "2", moves::SPLIT_FALSE }, { "3", moves::SPLIT_FALSE }, { "4", moves::SPLIT_FALSE }, { "5", moves::SPLIT_FALSE }, { "6", moves::SPLIT_FALSE }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
+    { "9", { { "2", moves::SPLIT_TRUE }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_TRUE }, { "9", moves::SPLIT_TRUE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
+    { "8", { { "2", moves::SPLIT_TRUE }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_TRUE }, { "9", moves::SPLIT_TRUE }, { "10", moves::SPLIT_TRUE }, { "A", true } }},
+    { "7", { { "2", moves::SPLIT_TRUE }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
+    { "6", { { "2", moves::SPLIT_DAS }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
+    { "5", { { "2", moves::SPLIT_FALSE }, { "3", moves::SPLIT_FALSE }, { "4", moves::SPLIT_FALSE }, { "5", moves::SPLIT_FALSE }, { "6", moves::SPLIT_FALSE }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
+    { "4", { { "2", moves::SPLIT_FALSE }, { "3", moves::SPLIT_FALSE }, { "4", moves::SPLIT_FALSE }, { "5", moves::SPLIT_DAS }, { "6", moves::SPLIT_DAS }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
+    { "3", { { "2", moves::SPLIT_DAS }, { "3", moves::SPLIT_DAS }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
+    { "2", { { "2", moves::SPLIT_DAS }, { "3", moves::SPLIT_DAS }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }}
 };
 
 map<string, int> hi_lo = {
@@ -46,12 +46,12 @@ void Player::play_hand(string dealer_upcard, vector<string> hand, int depth) {
     bool can_split = hand[0] == hand[1] && !aces && below_max_splits;
     if (can_split) {
 
-        bool should_split = splitting[hand[0]][dealer_upcard];
-        if (should_split == NULL) {
-            should_split = rules->get_das();
+        moves::splitting should_split = splitting[hand[0]][dealer_upcard];
+        if (should_split == moves::SPLIT_DAS && rules->get_das()) {
+            should_split = moves::SPLIT_TRUE;
         }
 
-        if (should_split) {
+        if (should_split == moves::SPLIT_TRUE) {
             vector<string> new_hand_first = { hand[0], shoe->draw() }; 
             vector<string> new_hand_second = { hand[1], shoe->draw() }; 
             play_hand(dealer_upcard, new_hand_first, ++depth);

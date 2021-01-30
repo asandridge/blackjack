@@ -12,6 +12,13 @@ namespace moves
         SURRENDER 
     };
 
+    enum splitting
+    {
+        SPLIT_TRUE,
+        SPLIT_FALSE,
+        SPLIT_DAS
+    };
+
 }
 
 #endif

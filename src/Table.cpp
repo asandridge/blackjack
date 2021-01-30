@@ -13,10 +13,8 @@ int Table::play_round() {
 
     if (bet != 0) {
         vector<string> player_hand = dealer.deal();
-        print_table({ { player_hand, 0 } });
         player.play_hand(dealer.get_up_card(), player_hand, 0);
         dealer.play_hand();
-        print_table(player.get_hands());
         dealer.make_refunds(bet);
         player.update_running_count(dealer.get_hand());
     }
