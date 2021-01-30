@@ -1,4 +1,4 @@
-# Blackjack Simulator
+# Card Counting Simulator
 
 This program is designed to accurately imitate a real-life blackjack game, and to help estimate EV (expected value) for playing blackjack as a card counter.
 
