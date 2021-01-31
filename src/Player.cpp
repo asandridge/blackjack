@@ -6,26 +6,9 @@
 #include <tuple>
 
 #include "../include/Player.hpp"
-#include "../include/Moves.hpp"
+#include "../include/Strategy.hpp"
 
 using namespace std;
-
-map<string, map<string, moves::splitting>> splitting = {
-    { "A", { { "2", moves::SPLIT_TRUE }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_TRUE }, { "9", moves::SPLIT_TRUE }, { "10", moves::SPLIT_TRUE }, { "A", true } }},
-    { "10", { { "2", moves::SPLIT_FALSE }, { "3", moves::SPLIT_FALSE }, { "4", moves::SPLIT_FALSE }, { "5", moves::SPLIT_FALSE }, { "6", moves::SPLIT_FALSE }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
-    { "9", { { "2", moves::SPLIT_TRUE }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_TRUE }, { "9", moves::SPLIT_TRUE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
-    { "8", { { "2", moves::SPLIT_TRUE }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_TRUE }, { "9", moves::SPLIT_TRUE }, { "10", moves::SPLIT_TRUE }, { "A", true } }},
-    { "7", { { "2", moves::SPLIT_TRUE }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
-    { "6", { { "2", moves::SPLIT_DAS }, { "3", moves::SPLIT_TRUE }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
-    { "5", { { "2", moves::SPLIT_FALSE }, { "3", moves::SPLIT_FALSE }, { "4", moves::SPLIT_FALSE }, { "5", moves::SPLIT_FALSE }, { "6", moves::SPLIT_FALSE }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
-    { "4", { { "2", moves::SPLIT_FALSE }, { "3", moves::SPLIT_FALSE }, { "4", moves::SPLIT_FALSE }, { "5", moves::SPLIT_DAS }, { "6", moves::SPLIT_DAS }, { "7", moves::SPLIT_FALSE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
-    { "3", { { "2", moves::SPLIT_DAS }, { "3", moves::SPLIT_DAS }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }},
-    { "2", { { "2", moves::SPLIT_DAS }, { "3", moves::SPLIT_DAS }, { "4", moves::SPLIT_TRUE }, { "5", moves::SPLIT_TRUE }, { "6", moves::SPLIT_TRUE }, { "7", moves::SPLIT_TRUE }, { "8", moves::SPLIT_FALSE }, { "9", moves::SPLIT_FALSE }, { "10", moves::SPLIT_FALSE }, { "A", false } }}
-};
-
-map<string, int> hi_lo = {
-    {"2", 1}, {"3", 1}, {"4", 1}, {"5", 1}, {"6", 1}, {"7", 0}, {"8", 0}, {"9", 0}, {"10", -1}, {"A", -1}
-};
 
 int Player::get_bankroll() {
     return bankroll;
@@ -46,12 +29,12 @@ void Player::play_hand(string dealer_upcard, vector<string> hand, int depth) {
     bool can_split = hand[0] == hand[1] && !aces && below_max_splits;
     if (can_split) {
 
-        moves::splitting should_split = splitting[hand[0]][dealer_upcard];
-        if (should_split == moves::SPLIT_DAS && rules->get_das()) {
-            should_split = moves::SPLIT_TRUE;
+        strategy::splitting_moves should_split = strategy::splitting_strategy[hand[0]][dealer_upcard];
+        if (should_split == strategy::SPLIT_DAS && rules->get_das()) {
+            should_split = strategy::SPLIT_TRUE;
         }
 
-        if (should_split == moves::SPLIT_TRUE) {
+        if (should_split == strategy::SPLIT_TRUE) {
             vector<string> new_hand_first = { hand[0], shoe->draw() }; 
             vector<string> new_hand_second = { hand[1], shoe->draw() }; 
             play_hand(dealer_upcard, new_hand_first, ++depth);
@@ -68,24 +51,24 @@ void Player::play_hand(string dealer_upcard, vector<string> hand, int depth) {
 
 int Player::complete_hand(string dealer_upcard, vector<string> *hand, bool after_split, bool hand_first_move) {
 
-    moves::moves move = score_helper.determine_hand_move(dealer_upcard, *hand);
+    strategy::moves move = score_helper.determine_hand_move(dealer_upcard, *hand);
 
     bool cannot_double = !rules->get_das() && after_split;
     bool cannot_surrender = !hand_first_move; 
-    if ((move == moves::DOUBLE && cannot_double) ||
-        (move == moves::SURRENDER && cannot_surrender)) { // default to hit if current move is not allowed based on current game state
-        move = moves::HIT;
+    if ((move == strategy::DOUBLE && cannot_double) ||
+        (move == strategy::SURRENDER && cannot_surrender)) { // default to hit if current move is not allowed based on current game state
+        move = strategy::HIT;
     }
 
     switch (move) {
-        case moves::DOUBLE:
+        case strategy::DOUBLE:
             hit(hand);
             return 2;
-        case moves::SURRENDER:
+        case strategy::SURRENDER:
             return 0;
-        case moves::STAND:
+        case strategy::STAND:
             return 1;
-        case moves::HIT:
+        case strategy::HIT:
             hit(hand);
             return complete_hand(dealer_upcard, hand, after_split, false);
         default:
@@ -130,12 +113,7 @@ void Player::payout(int cash) {
 
 void Player::update_running_count(vector<string> dealer_hand) {
 
-    map <string, int> count_map;
-    if (rules->get_counting_strategy() == "Hi-Lo") {
-        count_map = hi_lo;
-    } else {
-        count_map = hi_lo;
-    }
+    map <string, int> count_map = rules->get_counting_strategy();
 
     for (int i = 0; i < dealer_hand.size(); i++) {
         running_count += count_map[dealer_hand[i]];

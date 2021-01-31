@@ -28,7 +28,7 @@ class RuleBook
         bool get_h17();
         bool get_das();
         bool get_variants();
-        string get_counting_strategy();
+        map<string, int> get_counting_strategy();
         float get_blackjack_payout();
         int get_resplit_limit();
         void print_rules();

@@ -5,7 +5,7 @@
 #include <string>
 #include <tuple>
 
-#include "../include/Moves.hpp"
+#include "../include/Strategy.hpp"
 
 using namespace std;
 
@@ -15,7 +15,7 @@ class ScoreHelper
     public:
 
         tuple<int, bool> calculate_hand_score(vector<string>);
-        moves::moves determine_hand_move(string, vector<string>);
+        strategy::moves determine_hand_move(string, vector<string>);
         int calculate_refund(vector<string>, vector<string>, int);
 
 };

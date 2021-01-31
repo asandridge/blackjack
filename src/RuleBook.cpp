@@ -9,6 +9,9 @@ using namespace std;
 
 vector<string> deck_choices = { "2", "4", "6", "8" };
 vector<string> counting_choices = { "Hi-Lo" };
+map<string, map<string, int>> counting_strategies = { 
+    { "Hi-Lo", { {"2", 1}, {"3", 1}, {"4", 1}, {"5", 1}, {"6", 1}, {"7", 0}, {"8", 0}, {"9", 0}, {"10", -1}, {"A", -1} }}
+};
 vector<string> payout_choices = { "1.5", "1.2" };
 vector<string> resplit_choices = { "2", "3", "4" };
 
@@ -68,6 +71,7 @@ void RuleBook::set_rules() {
         counting_strategy = counting_choices[0];
         blackjack_payout = stof(payout_choices[0]);
         resplit_limit = stoi(resplit_choices[2]);
+
     }
 }
 
@@ -87,8 +91,8 @@ bool RuleBook::get_variants() {
     return variants;
 }
 
-string RuleBook::get_counting_strategy() {
-    return counting_strategy;
+map<string, int> RuleBook::get_counting_strategy() {
+    return counting_strategies[counting_strategy];
 }
 
 float RuleBook::get_blackjack_payout() {
