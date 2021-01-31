@@ -8,7 +8,6 @@ namespace strategy
         HIT,
         STAND,
         DOUBLE,
-        SPLIT,
         SURRENDER 
     };
 

@@ -29,7 +29,9 @@ int main() {
     int hands = 0;
     int player_bankroll;
     while (hands < stoi(max_hands)) {
+        cout << "========= Round: " << (hands + 1) << " =========" << endl << endl;
         player_bankroll = table.play_round();
+        cout << "Bankroll: " << player_bankroll << endl << endl;
         hands++;
     }
 

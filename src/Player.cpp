@@ -14,9 +14,9 @@ int Player::get_bankroll() {
     return bankroll;
 }
 
-// void Player::deal(vector<string> new_hand) {
-//     hands = { new_hand }; 
-// }
+void Player::deal() {
+    hands = {}; 
+}
 
 vector<tuple<vector<string>, int>> Player::get_hands() {
     return hands;
@@ -62,13 +62,17 @@ int Player::complete_hand(string dealer_upcard, vector<string> *hand, bool after
 
     switch (move) {
         case strategy::DOUBLE:
+            cout << "DOUBLE" << endl;
             hit(hand);
             return 2;
         case strategy::SURRENDER:
-            return 0;
+            cout << "SURRENDER" << endl;
+            return -1;
         case strategy::STAND:
+            cout << "STAND" << endl;
             return 1;
         case strategy::HIT:
+            cout << "HIT" << endl;
             hit(hand);
             return complete_hand(dealer_upcard, hand, after_split, false);
         default:
@@ -81,7 +85,7 @@ void Player::hit(vector<string> *hand) {
     hand->push_back(new_card);
 }
 
-int Player::make_bet(int betting_unit) {
+int Player::place_bet(int betting_unit) {
 
     int bet = betting_unit;
     int true_count = get_true_count(); 
@@ -97,7 +101,6 @@ int Player::make_bet(int betting_unit) {
         bet = bankroll;
     }
 
-    bankroll -= bet;
     return bet;
 }
 

@@ -12,6 +12,7 @@ vector<string> Dealer::deal() {
     string player_first_card = shoe->draw();
     string player_second_card = shoe->draw();
     hand = { dealer_first_card, dealer_second_card };
+    player->deal();
     return { player_first_card, player_second_card };
 }
 
@@ -34,7 +35,7 @@ void Dealer::play_hand() {
     int count = get<0>(score);
     bool is_soft_hand = get<1>(score);
 
-    if (count < 17 || (count == 17 && is_soft_hand && rules->get_h17())) {
+    if ((count > 0 && count < 17) || (count == 17 && is_soft_hand && rules->get_h17())) {
         hit();
         play_hand();
     }
@@ -46,14 +47,18 @@ void Dealer::make_refunds(int bet) {
     vector<tuple<vector<string>, int>> player_hands = player->get_hands();
     int blackjack_payout = rules->get_blackjack_payout();
     vector<string> cards;
-    int in_game_bet;
-    int refund_multiplier;
+    int in_game_multiplier; // doubling and surrendering change the bet
+    int refund_multiplier; // refund depends on blackjacks, ties, and wins
 
     for (int i = 0; i < player_hands.size(); i++) {
         cards = get<0>(player_hands[i]);
-        in_game_bet = get<1>(player_hands[i]);
-        refund_multiplier = score_helper.calculate_refund(hand, cards, blackjack_payout);
-        player->payout(in_game_bet * refund_multiplier * bet);
+        in_game_multiplier = get<1>(player_hands[i]);
+        if (in_game_multiplier < 0) { // this is a surrender
+            player->payout(in_game_multiplier * bet);
+        } else {
+            refund_multiplier = score_helper.calculate_refund(hand, cards, blackjack_payout);
+            player->payout(in_game_multiplier * refund_multiplier * bet);
+        }
     }
 
 }

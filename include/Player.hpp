@@ -31,8 +31,8 @@ class Player
 
         void play_hand(string, vector<string>, int);
         int get_bankroll();
-        // void deal(vector<string>);
-        int make_bet(int);
+        void deal();
+        int place_bet(int);
         vector<tuple<vector<string>, int>> get_hands();
         void payout(int);
         void update_running_count(vector<string>);
