@@ -15,7 +15,7 @@ int Player::get_bankroll() {
 }
 
 void Player::deal() {
-    hands = {}; 
+    hands = {};
 }
 
 vector<tuple<vector<string>, int>> Player::get_hands() {
@@ -25,7 +25,7 @@ vector<tuple<vector<string>, int>> Player::get_hands() {
 void Player::play_hand(string dealer_upcard, vector<string> hand, int depth) {
 
     bool aces = hand[0] == "A" && hand[1] == "A" && depth > 0; // Cannot resplit aces
-    bool below_max_splits = hands.size() < rules->get_resplit_limit(); 
+    bool below_max_splits = hands.size() < rules->get_resplit_limit();
     bool can_split = hand[0] == hand[1] && !aces && below_max_splits;
     if (can_split) {
 
@@ -35,8 +35,8 @@ void Player::play_hand(string dealer_upcard, vector<string> hand, int depth) {
         }
 
         if (should_split == strategy::SPLIT_TRUE) {
-            vector<string> new_hand_first = { hand[0], shoe->draw() }; 
-            vector<string> new_hand_second = { hand[1], shoe->draw() }; 
+            vector<string> new_hand_first = { hand[0], shoe->draw() };
+            vector<string> new_hand_second = { hand[1], shoe->draw() };
             play_hand(dealer_upcard, new_hand_first, ++depth);
             play_hand(dealer_upcard, new_hand_second, ++depth);
         }
@@ -54,7 +54,7 @@ int Player::complete_hand(string dealer_upcard, vector<string> *hand, bool after
     strategy::moves move = score_helper.determine_hand_move(dealer_upcard, *hand);
 
     bool cannot_double = !rules->get_das() && after_split;
-    bool cannot_surrender = !hand_first_move; 
+    bool cannot_surrender = !hand_first_move;
     if ((move == strategy::DOUBLE && cannot_double) ||
         (move == strategy::SURRENDER && cannot_surrender)) { // default to hit if current move is not allowed based on current game state
         move = strategy::HIT;
@@ -88,7 +88,7 @@ void Player::hit(vector<string> *hand) {
 int Player::place_bet(int betting_unit) {
 
     int bet = betting_unit;
-    int true_count = get_true_count(); 
+    int true_count = get_true_count();
 
     // Basic bet spread
     if (true_count > 1 && true_count <= 5) {
@@ -112,6 +112,10 @@ int Player::get_true_count() {
 
 void Player::payout(int cash) {
     bankroll += cash;
+}
+
+void Player::reshuffle() {
+    running_count = 0;
 }
 
 void Player::update_running_count(vector<string> dealer_hand) {

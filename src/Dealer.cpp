@@ -3,10 +3,15 @@
 #include <tuple>
 
 #include "../include/Dealer.hpp"
+#include "../include/Deck.hpp"
 
 using namespace std;
 
 vector<string> Dealer::deal() {
+    if (shoe->get_shoe_size() < (rules->get_decks() * deck::deck_size) / 4) { // reshuffle at 75%
+        shoe->reshuffle();
+        player->reshuffle();
+    }
     string dealer_first_card = shoe->draw();
     string dealer_second_card = shoe->draw();
     string player_first_card = shoe->draw();

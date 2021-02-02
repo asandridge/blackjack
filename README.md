@@ -46,6 +46,8 @@ These rules are built into the program.
 
 **Dealer Blackjack**: Player only loses original bet to a dealer blackjack.
 
+**Reshuffle**: The dealer reshuffles when 75% of the cards have been dealt.
+
 **Basic Strategy**: The tables for the basic strategy implemented here can be found [here](https://www.blackjackapprenticeship.com/blackjack-strategy-charts/).
 
 **Player Bankroll** The player starts with $1000 and the betting unit is $10.

@@ -35,6 +35,7 @@ class Player
         int place_bet(int);
         vector<tuple<vector<string>, int>> get_hands();
         void payout(int);
+        void reshuffle();
         void update_running_count(vector<string>);
         void hit(vector<string>*);
 
