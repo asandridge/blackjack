@@ -27,24 +27,23 @@ void Player::play_hand(string dealer_upcard, vector<string> hand, int depth) {
     bool aces = hand[0] == "A" && hand[1] == "A" && depth > 0; // Cannot resplit aces
     bool below_max_splits = hands.size() < rules->get_resplit_limit();
     bool can_split = hand[0] == hand[1] && !aces && below_max_splits;
-    if (can_split) {
 
-        strategy::splitting_moves should_split = strategy::splitting_strategy[hand[0]][dealer_upcard];
-        if (should_split == strategy::SPLIT_DAS && rules->get_das()) {
-            should_split = strategy::SPLIT_TRUE;
-        }
+    strategy::splitting_moves split_strategy = strategy::splitting_strategy[hand[0]][dealer_upcard];
+    bool should_split = split_strategy == strategy::SPLIT_TRUE || (split_strategy == strategy::SPLIT_DAS && rules->get_das());
 
-        if (should_split == strategy::SPLIT_TRUE) {
-            vector<string> new_hand_first = { hand[0], shoe->draw() };
-            vector<string> new_hand_second = { hand[1], shoe->draw() };
-            play_hand(dealer_upcard, new_hand_first, ++depth);
-            play_hand(dealer_upcard, new_hand_second, ++depth);
-        }
+    if (can_split && should_split) {
+
+        vector<string> new_hand_first = { hand[0], shoe->draw() };
+        vector<string> new_hand_second = { hand[1], shoe->draw() };
+        play_hand(dealer_upcard, new_hand_first, ++depth);
+        play_hand(dealer_upcard, new_hand_second, ++depth);
 
     } else {
+
         bool after_split = depth > 0;
         int bet = complete_hand(dealer_upcard, &hand, after_split, true);
         hands.push_back({ hand, bet });
+
     }
 
 }

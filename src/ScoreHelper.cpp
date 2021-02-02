@@ -67,14 +67,11 @@ int ScoreHelper::calculate_refund(vector<string> dealer_hand, vector<string> pla
     bool dealer_blackjack = dealer_count == 21 && get<1>(dealer_score);
     bool player_blackjack = player_count == 21 && get<1>(player_score);
 
-    if (player_blackjack) { 
-        if (!dealer_blackjack) return blackjack_payout;
-        else return 0; // two blackjacks tie
-    } else if (player_count > dealer_count) {
-        return 1;
-    } else if (player_count == dealer_count && player_count != 0) { // player only ties when not having bust
-        return 0;
-    } else {
-        return -1;
-    }
+    if (player_count == 0) return -1; // player always loses on bust
+    else if (player_blackjack && !dealer_blackjack) return blackjack_payout;
+    else if (dealer_blackjack && !player_blackjack) return -1;
+    else if (player_blackjack && dealer_blackjack) return 0; // two blackjacks tie
+    else if (player_count > dealer_count) return 1;
+    else if (player_count == dealer_count) return 0;
+    else return -1;
 }
