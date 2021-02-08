@@ -2,77 +2,78 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <regex>
 
 #include "../include/RuleBook.hpp"
 
 using namespace std;
 
-vector<string> deck_choices = { "2", "4", "6", "8" };
-vector<string> counting_choices = { "Hi-Lo" };
-map<string, map<string, int>> counting_strategies = { 
-    { "Hi-Lo", { {"2", 1}, {"3", 1}, {"4", 1}, {"5", 1}, {"6", 1}, {"7", 0}, {"8", 0}, {"9", 0}, {"10", -1}, {"A", -1} }}
+map<string, map<string, int>> counting_strategies = {
+    { "hilo", { {"2", 1}, {"3", 1}, {"4", 1}, {"5", 1}, {"6", 1}, {"7", 0}, {"8", 0}, {"9", 0}, {"10", -1}, {"A", -1} }}
 };
-vector<string> payout_choices = { "1.5", "1.2" };
-vector<string> resplit_choices = { "2", "3", "4" };
+map<string, vector<string>> input_choices = {
+    { "rounds", {} },
+    { "decks", { "2", "4", "6", "8" } },
+    { "h17", { "true", "false" } },
+    { "das", { "true", "false" } },
+    { "variants", { "true", "false" } },
+    { "counting_strategy", { "hilo" } },
+    { "blackjack_payout", { "1.5", "1.2" } },
+    { "resplit_limit", { "2", "3", "4" } }
+};
 
-bool RuleBook::get_yes_no(string prompt) {
-    string rule;
-    cout << "Do you want to play " << prompt << " (y/n)" << endl;
-    cin >> rule;
-    while (rule != "n" && rule != "y") {
-        cout << "Please enter y or n." << endl;
-        cin >> rule;
+void RuleBook::validate_rule(string rule) {
+
+    std::regex pattern ("[a-z0-9_]+:[a-z0-9\\.]+");
+    if (std::regex_match(rule, pattern)) {
+
+        string rule_name = rule.substr(0, rule.find(":"));
+        string rule_value = rule.substr(rule.find(":") + 1);
+
+        if (input_choices.find(rule_name) != input_choices.end()) {
+
+            if (rule_name == "rounds" && stoi(rule_value) > 0) {
+
+                rounds = stoi(rule_value);
+                return;
+
+            } else {
+
+                for (int i = 0; i < input_choices[rule_name].size(); i++) {
+                    if (rule_value == input_choices[rule_name][i]) {
+                        if (rule_name == "decks") decks = stoi(rule_value);
+                        else if (rule_name == "h17") h17 = rule_value == "true";
+                        else if (rule_name == "das") das = rule_value == "true";
+                        else if (rule_name == "variants") variants = rule_value == "true";
+                        else if (rule_name == "counting_strategy") counting_strategies[rule_value];
+                        else if (rule_name == "blackjack_payout") blackjack_payout = stof(rule_value);
+                        else if (rule_name == "resplit_limit") resplit_limit = stoi(rule_value);
+                        return;
+                    }
+                }
+            }
+
+            throw std::invalid_argument( rule_value + " is an invalid value for rule: " + rule_name );
+        }
+        throw std::invalid_argument( rule_name + " is an invalid rule." );
     }
-    return rule == "y";
+    throw std::invalid_argument( "Rule does not match correct syntax: " + rule );
 }
 
-string RuleBook::get_choice(string prompt, vector<string> choice_vector) {
-
-    string choice_string = "";
-    for (vector<string>::iterator it = choice_vector.begin(); it != choice_vector.end(); ++it) {
-        choice_string.append(*it);
-        choice_string.append("/");
-    }
-    choice_string = choice_string.substr(0, choice_string.size() - 1);
+void RuleBook::read_rules() {
 
     string rule;
-    cout << prompt << " do you want to use? (" << choice_string << ")" << endl;
-    cin >> rule;
-    while (count(choice_vector.begin(), choice_vector.end(), rule) == 0) {
-        cout << "Please enter a valid option." << endl;
-        cin >> rule;
+    fstream input_file;
+    input_file.open("options.txt", ios::in);
+    while (getline(input_file, rule)) {
+        validate_rule(rule);
     }
+    input_file.close();
 
-    return rule;
 }
 
-void RuleBook::set_rules() {
-
-    cout << endl << "Default rules: 6 decks, H17, DAS, variants, Hi-Lo counting, 3:2 blackjack payout, resplit to 4 hands" << endl;
-    bool default_rules = get_yes_no("with default rules?");
-
-    if (!default_rules) {
-
-        decks = stoi(get_choice("How many decks", deck_choices));
-        h17 = get_yes_no("H17 (hit on seventeen)?");
-        das = get_yes_no("with DAS (double after split)?");
-        variants = get_yes_no("with count-based variants?");
-        counting_strategy = get_choice("What counting strategy", counting_choices);
-        blackjack_payout = stof(get_choice("What blackjack payout", payout_choices));
-        resplit_limit = stoi(get_choice("What resplit limit", resplit_choices));
-
-    } else {
-
-        cout << endl << "Rules will be set to defaults." << endl;
-        decks = stoi(deck_choices[2]);
-        h17 = true;
-        das = true;
-        variants = true;
-        counting_strategy = counting_choices[0];
-        blackjack_payout = stof(payout_choices[0]);
-        resplit_limit = stoi(resplit_choices[2]);
-
-    }
+int RuleBook::get_rounds() {
+    return rounds;
 }
 
 int RuleBook::get_decks() {

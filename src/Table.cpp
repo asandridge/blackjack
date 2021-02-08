@@ -13,10 +13,10 @@ int Table::play_round() {
 
     if (bet != 0) {
         vector<string> player_hand = dealer.deal();
-        print_table({{ player_hand, 1 }});
+        // print_table({{ player_hand, 1 }});
         player.play_hand(dealer.get_up_card(), player_hand, 0);
         dealer.play_hand();
-        print_table(player.get_hands());
+        // print_table(player.get_hands());
         dealer.make_refunds(bet);
         player.update_running_count(dealer.get_hand());
     }
@@ -32,7 +32,7 @@ void Table::print_table(vector<tuple<vector<string>, int>> player_hands) {
         cout << "{ ";
         player_cards = get<0>(player_hands[i]);
         for (int j = 0; j < player_cards.size(); j++) {
-           cout << player_cards[j]; 
+           cout << player_cards[j];
            cout << (j == player_cards.size() - 1 ? "" : ", ");
         }
         cout << " }";
@@ -46,4 +46,16 @@ void Table::print_table(vector<tuple<vector<string>, int>> player_hands) {
         cout << (i == dealer_hand.size() - 1 ? "" : ", ");
     }
     cout << " }" << endl << endl;
+}
+
+
+void Table::reset() {
+
+    shoe.reshuffle();
+    player.reset();
+
+}
+
+int Table::get_player_bankroll() {
+    return player.get_bankroll();
 }

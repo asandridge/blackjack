@@ -4,6 +4,7 @@
 
 #include "../include/Dealer.hpp"
 #include "../include/Deck.hpp"
+#include "../include/Strategy.hpp"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ vector<string> Dealer::get_hand() {
 
 void Dealer::play_hand() {
 
-    tuple<int, bool> score = score_helper.calculate_hand_score(hand);
+    tuple<int, bool> score = strategy::calculate_hand_score(hand);
     int count = get<0>(score);
     bool is_soft_hand = get<1>(score);
 
@@ -61,7 +62,7 @@ void Dealer::make_refunds(int bet) {
         if (in_game_multiplier < 0) { // this is a surrender
             player->payout(in_game_multiplier * bet);
         } else {
-            refund_multiplier = score_helper.calculate_refund(hand, cards, blackjack_payout);
+            refund_multiplier = strategy::calculate_refund(hand, cards, blackjack_payout);
             player->payout(in_game_multiplier * refund_multiplier * bet);
         }
     }

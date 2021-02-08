@@ -16,21 +16,21 @@ class Table
         Dealer dealer;
         Shoe shoe;
         RuleBook rules;
-        ScoreHelper score_helper;
-
 
     public:
 
         Table(RuleBook *rules) :
             rules(*rules),
             shoe(Shoe(rules->get_decks())),
-            player(1000, &shoe, rules),
+            player(&shoe, rules),
             dealer(&shoe, rules, &player),
-            betting_unit(10)
+            betting_unit(1)
             {}
 
         int play_round();
         void print_table(vector<tuple<vector<string>, int>>);
+        void reset();
+        int get_player_bankroll();
 };
 
 

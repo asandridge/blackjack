@@ -15,7 +15,6 @@ class Dealer
         Shoe *shoe;
         RuleBook *rules;
         Player *player;
-        ScoreHelper score_helper;
 
      public:
 

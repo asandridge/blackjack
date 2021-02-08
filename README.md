@@ -8,23 +8,24 @@ To run the program:
 
     make run
 
-## Variable Rules
+## Rules
+To run the program with a different ruleset, you can update `options.txt`.
 
-These rules can be updated by the user.
+Use the format `rulename:rulevalue` with a newline separating each rule.
 
-**Decks**: The number of decks in the shoe.
+`decks - 2, 4, 6, 8`: The number of decks in the shoe.
 
-**H17**: Whether or not the dealer hits on a soft 17 or not.
+`h17 - true, false`: Whether or not the dealer hits on a soft 17 or not.
 
-**DAS**: Whether the player is allowed to double after split.
+`das - true, false`: Whether the player is allowed to double after split.
 
-**Variants**: Whether to change basic strategy based on the true count.
+`variants - true, false`: Whether to change basic strategy based on the true count.
 
-**Counting Strategy**: What card counting technique to use.
+`counting_strategy - hilo`: What card counting technique to use.
 
-**Blackjack Payout**: How much the player is payed upon receiving a blackjack.
+`blackjack_payout - 1.5, 1.2`: How much the player is payed upon receiving a blackjack.
 
-**Resplit Limit**: The max number of decks a player can resplit to.
+`resplit_limit - 2, 3, 4`: The max number of decks a player can resplit to.
 
 ## Static Rules
 
@@ -51,3 +52,4 @@ These rules are built into the program.
 **Basic Strategy**: The tables for the basic strategy implemented here can be found [here](https://www.blackjackapprenticeship.com/blackjack-strategy-charts/).
 
 **Player Bankroll** The player starts with $1000 and the betting unit is $10.
+

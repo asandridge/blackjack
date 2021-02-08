@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <regex>
@@ -10,32 +11,35 @@ using namespace std;
 
 int main() {
 
-    string max_hands;
-    cout << "How many hands do you want to play?" << endl;
-    cin >> max_hands;
-    regex regex_pattern("[0-9]+");
-    while (!regex_match(max_hands, regex_pattern)) {
-        cout << "Please enter a positive integer" << endl;
-        cin >> max_hands;
-    }
-
     RuleBook rule_book;
-    rule_book.set_rules();
     rule_book.print_rules();
     RuleBook *rules = &rule_book;
 
     Table table(rules);
 
-    int hands = 0;
-    int player_bankroll;
-    while (hands < stoi(max_hands)) {
-        cout << "========= Round: " << (hands + 1) << " =========" << endl << endl;
-        player_bankroll = table.play_round();
-        cout << "Bankroll: " << player_bankroll << endl << endl;
-        hands++;
+    int round = 0;
+    int total_rounds = rules->get_rounds();
+    int average_advantage = 0;
+    int round_advantage;
+
+    for (int i = 0; i < total_rounds; i++) {
+
+        // cout << "========= Round: " << (round + 1) << " =========" << endl << endl;
+
+        for (int j = 0; j < 100; j++) {
+            table.play_round();
+        }
+
+        round_advantage = table.get_player_bankroll() - 100; // Note: this assumes the player starts with $100
+
+        average_advantage += round_advantage;
+
+        table.reset();
+
     }
 
-    cout << "Final Player Bankroll: " << player_bankroll << endl;
+    average_advantage /= total_rounds;
+    cout << "House Edge: " << -(average_advantage) << endl;
 
     return 0;
 };

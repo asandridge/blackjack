@@ -6,7 +6,6 @@
 #include <tuple>
 
 #include "../src/Shoe.cpp"
-#include "../src/ScoreHelper.cpp"
 
 using namespace std;
 class Player
@@ -19,7 +18,6 @@ class Player
 
         Shoe *shoe;
         RuleBook *rules;
-        ScoreHelper score_helper;
 
         int complete_hand(string, vector<string>*, bool, bool);
         int get_true_count();
@@ -27,7 +25,7 @@ class Player
 
     public:
 
-        Player(int bankroll, Shoe *shoe, RuleBook *rules) : bankroll(bankroll), shoe(shoe), rules(rules), running_count(0) {}
+        Player(Shoe *shoe, RuleBook *rules) : bankroll(100), shoe(shoe), rules(rules), running_count(0) {}
 
         void play_hand(string, vector<string>, int);
         int get_bankroll();
@@ -38,6 +36,7 @@ class Player
         void reshuffle();
         void update_running_count(vector<string>);
         void hit(vector<string>*);
+        void reset();
 
 };
 

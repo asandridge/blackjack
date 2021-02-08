@@ -14,9 +14,9 @@ class ScoreHelper
 
     public:
 
-        tuple<int, bool> calculate_hand_score(vector<string>);
-        strategy::moves determine_hand_move(string, vector<string>);
-        int calculate_refund(vector<string>, vector<string>, int);
+        static tuple<int, bool> calculate_hand_score(vector<string>);
+        static strategy::moves determine_hand_move(string, vector<string>);
+        static int calculate_refund(vector<string>, vector<string>, int);
 
 };
 

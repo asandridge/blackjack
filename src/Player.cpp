@@ -50,7 +50,7 @@ void Player::play_hand(string dealer_upcard, vector<string> hand, int depth) {
 
 int Player::complete_hand(string dealer_upcard, vector<string> *hand, bool after_split, bool hand_first_move) {
 
-    strategy::moves move = score_helper.determine_hand_move(dealer_upcard, *hand);
+    strategy::moves move = strategy::determine_hand_move(dealer_upcard, *hand);
 
     bool cannot_double = !rules->get_das() && after_split;
     bool cannot_surrender = !hand_first_move;
@@ -61,17 +61,17 @@ int Player::complete_hand(string dealer_upcard, vector<string> *hand, bool after
 
     switch (move) {
         case strategy::DOUBLE:
-            cout << "DOUBLE" << endl;
+            // cout << "DOUBLE" << endl;
             hit(hand);
             return 2;
         case strategy::SURRENDER:
-            cout << "SURRENDER" << endl;
+            // cout << "SURRENDER" << endl;
             return -1;
         case strategy::STAND:
-            cout << "STAND" << endl;
+            // cout << "STAND" << endl;
             return 1;
         case strategy::HIT:
-            cout << "HIT" << endl;
+            // cout << "HIT" << endl;
             hit(hand);
             return complete_hand(dealer_upcard, hand, after_split, false);
         default:
@@ -131,4 +131,9 @@ void Player::update_running_count(vector<string> dealer_hand) {
             running_count += count_map[hand_cards[j]];
         }
     }
+}
+
+void Player::reset() {
+    running_count = 0;
+    bankroll = 0;
 }

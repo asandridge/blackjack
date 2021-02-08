@@ -10,6 +10,7 @@ class RuleBook
 {
     private:
 
+        int rounds;
         int decks;
         bool h17;
         bool das;
@@ -18,12 +19,16 @@ class RuleBook
         float blackjack_payout;
         int resplit_limit;
 
-        bool get_yes_no(string);
-        string get_choice(string, vector<string>);
+        void read_rules();
+        void validate_rule(string);
 
     public:
 
-        void set_rules();
+        RuleBook() : rounds(10000), decks(6), h17(true), das(true), variants(true), counting_strategy("hilo"), blackjack_payout(1.5), resplit_limit(4) {
+            read_rules();
+        }
+
+        int get_rounds();
         int get_decks();
         bool get_h17();
         bool get_das();
