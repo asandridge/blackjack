@@ -9,6 +9,8 @@ To run the program:
     make run
 
 ## Rules
+The default ruleset is 10000 rounds, 6 decks, hit on soft 17, double after split, play with variants, Hi-Lo counting strategy, 3:2 blackjack payout, resplit to 4 hands max.
+
 To run the program with a different ruleset, you can update `options.txt`.
 
 Use the format `rulename:rulevalue` with a newline separating each rule.
