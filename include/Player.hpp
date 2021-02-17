@@ -14,6 +14,7 @@ class Player
 
         int bankroll;
         int running_count;
+        vector<string> initial_hand;
         vector<tuple<vector<string>, int>> hands;
 
         Shoe *shoe;
@@ -29,7 +30,7 @@ class Player
 
         void play_hand(string, vector<string>, int);
         int get_bankroll();
-        void deal();
+        void deal(vector<string>);
         int place_bet(int);
         vector<tuple<vector<string>, int>> get_hands();
         void payout(int);

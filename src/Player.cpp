@@ -14,7 +14,8 @@ int Player::get_bankroll() {
     return bankroll;
 }
 
-void Player::deal() {
+void Player::deal(vector<string> hand) {
+    initial_hand = hand;
     hands = {};
 }
 
@@ -23,6 +24,8 @@ vector<tuple<vector<string>, int>> Player::get_hands() {
 }
 
 void Player::play_hand(string dealer_upcard, vector<string> hand, int depth) {
+
+    if (depth == 0) hand = initial_hand;
 
     bool aces = hand[0] == "A" && hand[1] == "A" && depth > 0; // Cannot resplit aces
     bool below_max_splits = hands.size() < rules->get_resplit_limit();

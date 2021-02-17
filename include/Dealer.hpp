@@ -20,7 +20,7 @@ class Dealer
 
         Dealer(Shoe *shoe, RuleBook *rules, Player *player) : shoe(shoe), rules(rules), player(player) {}
 
-        vector<string> deal();
+        void deal();
         void play_hand();
         void hit();
         string get_up_card();

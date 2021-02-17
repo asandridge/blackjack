@@ -26,7 +26,7 @@ int main() {
 
         // cout << "========= Round: " << (round + 1) << " =========" << endl << endl;
 
-        for (int j = 0; j < 100; j++) {
+        for (int j = 0; j < 1; j++) {
             table.play_round();
         }
 

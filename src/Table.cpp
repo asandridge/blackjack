@@ -12,13 +12,14 @@ int Table::play_round() {
     int bet = player.place_bet(betting_unit);
 
     if (bet != 0) {
-        vector<string> player_hand = dealer.deal();
+        dealer.deal();
         // print_table({{ player_hand, 1 }});
-        player.play_hand(dealer.get_up_card(), player_hand, 0);
+        player.play_hand(dealer.get_up_card(), {}, 0);
         dealer.play_hand();
-        // print_table(player.get_hands());
+        print_table(player.get_hands());
         dealer.make_refunds(bet);
         player.update_running_count(dealer.get_hand());
+        // cout << player.get_bankroll() << endl;
     }
 
     return player.get_bankroll();
